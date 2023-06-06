@@ -10,12 +10,14 @@ namespace Laokontroll.Views
     public partial class Laohaldus : ContentPage
     {
         private WarehouseDatabase database;
+        private ListView warehouseListView;
+        private Laos selectedWarehouse;
 
         public Laohaldus(WarehouseDatabase database)
         {
             this.database = database;
-
-            ListView warehouseListView = new ListView
+            this.selectedWarehouse = selectedWarehouse;
+            warehouseListView = new ListView
             {
                 ItemsSource = GetWarehouseList(),
                 ItemTemplate = new DataTemplate(typeof(TextCell))
@@ -23,27 +25,69 @@ namespace Laokontroll.Views
             warehouseListView.ItemTemplate.SetBinding(TextCell.TextProperty, "Nimetus");
             warehouseListView.ItemSelected += OnWarehouseSelected;
 
-            Content = warehouseListView;
+            Button deleteButton = new Button
+            {
+                Text = "Удалить склад",
+                IsEnabled = false
+            };
+            deleteButton.Clicked += OnDeleteButtonClicked;
+
+            Button viewButton = new Button
+            {
+                Text = "Перейти на страницу склада",
+                IsEnabled = false
+            };
+            viewButton.Clicked += OnViewButtonClicked;
+
+            Content = new StackLayout
+            {
+                Children = { warehouseListView, deleteButton, viewButton }
+            };
         }
 
         private void OnWarehouseSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            Laos selectedWarehouse = (Laos)e.SelectedItem;
+            selectedWarehouse = (Laos)e.SelectedItem;
+            Button deleteButton = (Button)((StackLayout)Content).Children[1];
+            deleteButton.IsEnabled = true;
 
-            bool delete = DisplayAlert("Подтвердить удаление", "Вы уверены, что хотите удалить склад?", "Да", "Нет").Result;
+            Button viewButton = (Button)((StackLayout)Content).Children[2];
+            viewButton.IsEnabled = true;
+        }
+
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            if (selectedWarehouse == null)
+                return;
+
+            bool delete = await DisplayAlert("Подтвердить удаление", "Вы уверены, что хотите удалить склад?", "Да", "Нет");
             if (delete)
             {
-                App.Database.SaveWarehouse(selectedWarehouse);
-                DisplayAlert("Успех", "Склад удален", "ОК").Wait();
+                database.DeleteWarehouse(selectedWarehouse);
+                await DisplayAlert("Успех", "Склад удален", "ОК");
 
-                ListView warehouseListView = (ListView)sender;
                 warehouseListView.ItemsSource = GetWarehouseList();
+                selectedWarehouse = null;
+
+                Button deleteButton = (Button)sender;
+                deleteButton.IsEnabled = false;
+
+                Button viewButton = (Button)((StackLayout)Content).Children[2];
+                viewButton.IsEnabled = false;
             }
         }
 
-        private List<Models.Laos> GetWarehouseList()
+        private async void OnViewButtonClicked(object sender, EventArgs e)
         {
-            return App.Database.GetWarehouses();
+            if (selectedWarehouse == null)
+                return;
+
+            await Navigation.PushAsync(new Lao(database,selectedWarehouse));
+        }
+
+        private List<Laos> GetWarehouseList()
+        {
+            return database.GetWarehouses();
         }
     }
 }

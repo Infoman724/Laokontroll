@@ -27,7 +27,7 @@ namespace Laokontroll
         public App()
         {
             InitializeComponent();
-            MainPage = new Pealeht();
+            MainPage = new NavigationPage( new Pealeht());
         }
 
        

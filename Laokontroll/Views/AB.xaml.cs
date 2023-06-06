@@ -16,6 +16,7 @@ namespace Laokontroll.Views
         private WarehouseDatabase database;
         private Laos warehouse;
         private Entry objectNameEntry;
+        private Entry objectAsukohtEntry;
 
         public AB(WarehouseDatabase database, Laos warehouse)
         {
@@ -27,6 +28,11 @@ namespace Laokontroll.Views
                 Placeholder = "Название объекта"
             };
 
+            objectAsukohtEntry = new Entry
+            {
+                Placeholder = "Местоположение объекта"
+            };
+
             Button addButton = new Button
             {
                 Text = "Добавить"
@@ -35,14 +41,20 @@ namespace Laokontroll.Views
 
             Content = new StackLayout
             {
-                Children = { objectNameEntry, addButton }
+                Children = { objectNameEntry, objectAsukohtEntry, addButton }
             };
         }
 
         private async void OnAddClicked(object sender, EventArgs e)
         {
             string objectName = objectNameEntry.Text;
-            Models.Object obj = new Models.Object { Nimetus = objectName };
+            string objectAsukoht = objectAsukohtEntry.Text;
+
+            Models.Object obj = new Models.Object
+            {
+                Nimetus = objectName,
+                Asukoht = objectAsukoht
+            };
 
             App.Database.SaveObject(obj);
             await DisplayAlert("Успех", "Объект добавлен на склад", "ОК");
@@ -50,5 +62,4 @@ namespace Laokontroll.Views
             await Navigation.PopAsync();
         }
     }
-
 }

@@ -37,21 +37,36 @@ namespace Laokontroll.Views
             return App.Database.GetObjects().ToList();
         }
 
-
-
         private async void OnObjectSelected(object sender, SelectedItemChangedEventArgs e)
         {
             Models.Object selectedObject = (Models.Object)e.SelectedItem;
 
-            bool delete = await DisplayAlert("Подтвердить удаление", "Вы уверены, что хотите удалить объект?", "Да", "Нет");
-            if (delete)
-            {
-                App.Database.DeleteObject(selectedObject);
-                await DisplayAlert("Успех", "Объект удален", "ОК");
+            await Navigation.PushAsync(new ObjectDetails(selectedObject));
+        }
 
-                ListView objectListView = (ListView)sender;
-                objectListView.ItemsSource = GetObjectList();
+        private async Task DisplayObjectDetails(Models.Object selectedObject, ListView objectListView)
+        {
+            string objectInfo = $"Имя: {selectedObject.Nimetus}\nМестоположение: {selectedObject.Asukoht}";
+            bool edit = await DisplayAlert("Детали объекта", objectInfo, "Редактировать", "Отмена");
+
+            if (edit)
+            {
+                await EditObject(selectedObject, objectListView);
             }
+        }
+
+        private async Task EditObject(Models.Object selectedObject, ListView objectListView)
+        {
+            string objectName = await DisplayPromptAsync("Редактирование объекта", "Введите новое имя", initialValue: selectedObject.Nimetus);
+            string objectAsukoht = await DisplayPromptAsync("Редактирование объекта", "Введите новое местоположение", initialValue: selectedObject.Asukoht);
+
+            selectedObject.Nimetus = objectName;
+            selectedObject.Asukoht = objectAsukoht;
+
+            App.Database.SaveObject(selectedObject);
+            await DisplayAlert("Успех", "Данные объекта обновлены", "ОК");
+
+            objectListView.ItemsSource = GetObjectList();
         }
     }
 }
