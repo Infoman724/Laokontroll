@@ -19,21 +19,44 @@ namespace Laokontroll.Views
         {
             database = new WarehouseDatabase("database.db");
 
-            Button createWarehouseButton = new Button
+            Image logoImage = new Image
             {
-                Text = "Создать склад"
+                Source = ImageSource.FromFile("korobkaLogo.png"),
+                Aspect = Aspect.AspectFit,
+                WidthRequest = 500, // установка ширины картинки
+                HeightRequest = 300, // установка высоты картинки
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+
+            BackgroundImageSource = "Fon.jpeg";
+            ImageButton createWarehouseButton = new ImageButton
+            {
+                Source = "LooLadu2.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             createWarehouseButton.Clicked += OnCreateWarehouseClicked;
 
-            Button manageWarehouseButton = new Button
+            ImageButton manageWarehouseButton = new ImageButton
             {
-                Text = "Управлять складом"
+                Source = "halda2.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             manageWarehouseButton.Clicked += OnManageWarehouseClicked;
 
             Content = new StackLayout
             {
-                Children = { createWarehouseButton, manageWarehouseButton }
+                Children = { logoImage, createWarehouseButton, manageWarehouseButton }
             };
         }
 

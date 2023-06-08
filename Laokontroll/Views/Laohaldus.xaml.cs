@@ -17,25 +17,43 @@ namespace Laokontroll.Views
         {
             this.database = database;
             this.selectedWarehouse = selectedWarehouse;
-            warehouseListView = new ListView
+            var warehouseListView = new ListView
             {
                 ItemsSource = GetWarehouseList(),
-                ItemTemplate = new DataTemplate(typeof(TextCell))
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "Nimetus");
+                    textCell.TextColor = Color.White; // Установите цвет текста на белый
+                    return textCell;
+                })
             };
-            warehouseListView.ItemTemplate.SetBinding(TextCell.TextProperty, "Nimetus");
+            
             warehouseListView.ItemSelected += OnWarehouseSelected;
+            BackgroundImageSource = "Fon.jpeg";
 
-            Button deleteButton = new Button
+            ImageButton deleteButton = new ImageButton
             {
-                Text = "Удалить склад",
-                IsEnabled = false
+                Source = "kustuta.png",
+                IsEnabled = false,
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center, 
+                VerticalOptions = LayoutOptions.Center  
             };
             deleteButton.Clicked += OnDeleteButtonClicked;
 
-            Button viewButton = new Button
+            
+            ImageButton viewButton = new ImageButton
             {
-                Text = "Перейти на страницу склада",
-                IsEnabled = false
+                Source = "Minne.png",
+                IsEnabled = false,
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center, 
+                VerticalOptions = LayoutOptions.Center 
             };
             viewButton.Clicked += OnViewButtonClicked;
 
@@ -48,10 +66,10 @@ namespace Laokontroll.Views
         private void OnWarehouseSelected(object sender, SelectedItemChangedEventArgs e)
         {
             selectedWarehouse = (Laos)e.SelectedItem;
-            Button deleteButton = (Button)((StackLayout)Content).Children[1];
+            ImageButton deleteButton = (ImageButton)((StackLayout)Content).Children[1];
             deleteButton.IsEnabled = true;
 
-            Button viewButton = (Button)((StackLayout)Content).Children[2];
+            ImageButton viewButton = (ImageButton)((StackLayout)Content).Children[2];
             viewButton.IsEnabled = true;
         }
 
@@ -60,11 +78,11 @@ namespace Laokontroll.Views
             if (selectedWarehouse == null)
                 return;
 
-            bool delete = await DisplayAlert("Подтвердить удаление", "Вы уверены, что хотите удалить склад?", "Да", "Нет");
+            bool delete = await DisplayAlert("Kinnita kustutamine", "Kas soovite kindlasti lao kustutada?", "Jah", "Ei");
             if (delete)
             {
                 database.DeleteWarehouse(selectedWarehouse);
-                await DisplayAlert("Успех", "Склад удален", "ОК");
+                await DisplayAlert("Õnnestus", "Ladu on kustutatud", "OK");
 
                 warehouseListView.ItemsSource = GetWarehouseList();
                 selectedWarehouse = null;

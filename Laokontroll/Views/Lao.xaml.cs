@@ -21,22 +21,37 @@ namespace Laokontroll.Views
             this.database = database;
             this.warehouse = warehouse;
 
-            Button viewObjectsButton = new Button
+            BackgroundImageSource = "Fon.jpeg";
+            ImageButton viewObjectsButton = new ImageButton
             {
-                Text = "Просмотреть все объекты на складе"
+                Source = "Vaadake.png",
+                
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 70, 
+                HorizontalOptions = LayoutOptions.Center, 
+                VerticalOptions = LayoutOptions.Center 
             };
             viewObjectsButton.Clicked += OnViewObjectsClicked;
 
-            Button addObjectButton = new Button
+            
+            ImageButton addObjectButton = new ImageButton
             {
-                Text = "Добавить объект на склад"
-            };
+                Source = "Lisa.png",
+                
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
+            };                                           
             addObjectButton.Clicked += OnAddObjectClicked;
 
             Content = new StackLayout
             {
                 Children = { viewObjectsButton, addObjectButton }
             };
+
         }
 
         private async void OnViewObjectsClicked(object sender, EventArgs e)

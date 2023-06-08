@@ -13,36 +13,57 @@ namespace Laokontroll.Views
         public ObjectDetails(Models.Object selectedObject)
         {
             this.selectedObject = selectedObject;
-
+            BackgroundImageSource = "Fon.jpeg";
             Label nameLabel = new Label
             {
-                Text = "Имя объекта:"
+                Text = "Objekti nimi:",
+                TextColor = Color.White,
+                
             };
             Entry nameEntry = new Entry
             {
-                Text = selectedObject.Nimetus
+                Text = selectedObject.Nimetus,
+                TextColor = Color.White,
+                PlaceholderColor = Color.White,
             };
             nameEntry.TextChanged += (sender, e) => selectedObject.Nimetus = e.NewTextValue;
 
             Label locationLabel = new Label
             {
-                Text = "Местоположение:"
+                Text = "Objekti asukoht:",
+                TextColor = Color.White,
             };
             Entry locationEntry = new Entry
             {
-                Text = selectedObject.Asukoht
+                Text = selectedObject.Asukoht,
+                TextColor = Color.White,
+                PlaceholderColor = Color.White,
             };
             locationEntry.TextChanged += (sender, e) => selectedObject.Asukoht = e.NewTextValue;
 
-            Button saveButton = new Button
+            
+            ImageButton saveButton = new ImageButton
             {
-                Text = "Сохранить"
+                Source = "Salvesta.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             saveButton.Clicked += OnSaveClicked;
 
-            Button deleteButton = new Button
+            
+            ImageButton deleteButton = new ImageButton
             {
-                Text = "Удалить"
+                Source = "Kustuta2.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             deleteButton.Clicked += OnDeleteClicked;
 
@@ -55,16 +76,16 @@ namespace Laokontroll.Views
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             App.Database.SaveObject(selectedObject);
-            await DisplayAlert("Успех", "Данные объекта сохранены", "ОК");
+            await DisplayAlert("Õnnestus", "Salvestusruum on salvestatud", "OK");
         }
 
         private async void OnDeleteClicked(object sender, EventArgs e)
         {
-            bool delete = await DisplayAlert("Подтвердить удаление", "Вы уверены, что хотите удалить объект?", "Да", "Нет");
+            bool delete = await DisplayAlert("Kinnita kustutamine", "Kas soovite kindlasti objekti kustutada?", "Jah", "Ei");
             if (delete)
             {
                 App.Database.DeleteObject(selectedObject);
-                await DisplayAlert("Успех", "Объект удален", "ОК");
+                await DisplayAlert("Õnnestus", "Objekt on kustutatud", "OK");
             }
         }
     }

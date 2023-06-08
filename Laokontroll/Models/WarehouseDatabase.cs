@@ -10,12 +10,7 @@ namespace Laokontroll
     {
         SQLiteConnection database;
 
-        /*public WarehouseDatabase(string databasePath)
-        {
-            database = new SQLiteConnection(databasePath);
-            database.CreateTable<Laos>();
-            database.CreateTable<Models.Object>();
-        }*/
+        
         public WarehouseDatabase(string databasePath)
         {
             string fullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), databasePath);
@@ -56,7 +51,7 @@ namespace Laokontroll
         {
             if (laos.LaosId != 0)
             {
-                database.Update(laos.LaosId); // Исправлено
+                database.Update(laos.LaosId); 
                 return laos.LaosId;
             }
             else
@@ -67,7 +62,7 @@ namespace Laokontroll
 
         public int DeleteWarehouse(Laos laos)
         {
-            return database.Delete(laos); // Исправлено
+            return database.Delete(laos);
 
         }
 

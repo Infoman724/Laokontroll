@@ -19,15 +19,24 @@ namespace Laokontroll.Views
         public Laoloomine(WarehouseDatabase database)
         {
             this.database = database;
-
+            BackgroundImageSource = "Fon.jpeg";
             warehouseNameEntry = new Entry
             {
-                Placeholder = "Имя склада"
+                Placeholder = "Lao nimi",
+                TextColor = Color.White,
+                PlaceholderColor = Color.White,
             };
 
-            Button createButton = new Button
+           
+            ImageButton createButton = new ImageButton
             {
-                Text = "Создать"
+                Source = "LooLadu2.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             createButton.Clicked += OnCreateClicked;
 
@@ -43,7 +52,7 @@ namespace Laokontroll.Views
             Laos laos = new Laos { Nimetus = warehouseName };
 
             App.Database.SaveWarehouse(laos);
-            await DisplayAlert("Успех", "Склад создан", "ОК");
+            await DisplayAlert("Õnnestus", "Ladu on loodud", "OK");
 
             await Navigation.PopAsync();
         }

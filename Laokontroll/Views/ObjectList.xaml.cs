@@ -1,10 +1,6 @@
 ﻿using Laokontroll.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,12 +17,17 @@ namespace Laokontroll.Views
         {
             this.database = database;
             this.warehouse = warehouse;
-
+            BackgroundImageSource = "Fon.jpeg";
             objectListView = new ListView
             {
-                ItemTemplate = new DataTemplate(typeof(TextCell))
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "Nimetus");
+                    textCell.TextColor = Color.White; // Установите цвет текста на белый
+                    return textCell;
+                })
             };
-            objectListView.ItemTemplate.SetBinding(TextCell.TextProperty, "Nimetus");
             objectListView.ItemSelected += OnObjectSelected;
 
             Content = objectListView;
@@ -46,9 +47,7 @@ namespace Laokontroll.Views
         private async void OnObjectSelected(object sender, SelectedItemChangedEventArgs e)
         {
             Models.Object selectedObject = (Models.Object)e.SelectedItem;
-
             await Navigation.PushAsync(new ObjectDetails(selectedObject));
         }
     }
-
 }

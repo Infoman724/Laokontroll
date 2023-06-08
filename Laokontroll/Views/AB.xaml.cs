@@ -23,19 +23,31 @@ namespace Laokontroll.Views
             this.database = database;
             this.warehouse = warehouse;
 
+            
             objectNameEntry = new Entry
             {
-                Placeholder = "Название объекта"
+                Placeholder = "Objekti nimi:",
+                TextColor = Color.White,
+                PlaceholderColor = Color.White,
             };
 
             objectAsukohtEntry = new Entry
             {
-                Placeholder = "Местоположение объекта"
+                Placeholder = "Objekti asukoht",
+                TextColor = Color.White,
+                PlaceholderColor = Color.White,
             };
+            BackgroundImageSource = "Fon.jpeg";
 
-            Button addButton = new Button
+            ImageButton addButton = new ImageButton
             {
-                Text = "Добавить"
+                Source = "Lisa.png",
+
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 300, 
+                HeightRequest = 50,                      
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center 
             };
             addButton.Clicked += OnAddClicked;
 
@@ -54,11 +66,11 @@ namespace Laokontroll.Views
             {
                 Nimetus = objectName,
                 Asukoht = objectAsukoht,
-                LaosId = warehouse.LaosId // Установка идентификатора текущего склада
+                LaosId = warehouse.LaosId 
             };
 
             App.Database.SaveObject(obj);
-            await DisplayAlert("Успех", "Объект добавлен на склад", "ОК");
+            await DisplayAlert("Õnnestus", "Objekt on lisatud", "OK");
 
             await Navigation.PopAsync();
         }
