@@ -15,15 +15,15 @@ namespace Laokontroll.Views
     {
         private WarehouseDatabase database;
         private Laos warehouse;
+        private ListView objectListView;
 
         public ObjectList(WarehouseDatabase database, Laos warehouse)
         {
             this.database = database;
             this.warehouse = warehouse;
 
-            ListView objectListView = new ListView
+            objectListView = new ListView
             {
-                ItemsSource = GetObjectList(),
                 ItemTemplate = new DataTemplate(typeof(TextCell))
             };
             objectListView.ItemTemplate.SetBinding(TextCell.TextProperty, "Nimetus");
@@ -32,9 +32,15 @@ namespace Laokontroll.Views
             Content = objectListView;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            objectListView.ItemsSource = GetObjectList();
+        }
+
         private List<Laokontroll.Models.Object> GetObjectList()
         {
-            return App.Database.GetObjects().ToList();
+            return App.Database.GetObjects().Where(obj => obj.LaosId == warehouse.LaosId).ToList();
         }
 
         private async void OnObjectSelected(object sender, SelectedItemChangedEventArgs e)
@@ -43,30 +49,6 @@ namespace Laokontroll.Views
 
             await Navigation.PushAsync(new ObjectDetails(selectedObject));
         }
-
-        private async Task DisplayObjectDetails(Models.Object selectedObject, ListView objectListView)
-        {
-            string objectInfo = $"Имя: {selectedObject.Nimetus}\nМестоположение: {selectedObject.Asukoht}";
-            bool edit = await DisplayAlert("Детали объекта", objectInfo, "Редактировать", "Отмена");
-
-            if (edit)
-            {
-                await EditObject(selectedObject, objectListView);
-            }
-        }
-
-        private async Task EditObject(Models.Object selectedObject, ListView objectListView)
-        {
-            string objectName = await DisplayPromptAsync("Редактирование объекта", "Введите новое имя", initialValue: selectedObject.Nimetus);
-            string objectAsukoht = await DisplayPromptAsync("Редактирование объекта", "Введите новое местоположение", initialValue: selectedObject.Asukoht);
-
-            selectedObject.Nimetus = objectName;
-            selectedObject.Asukoht = objectAsukoht;
-
-            App.Database.SaveObject(selectedObject);
-            await DisplayAlert("Успех", "Данные объекта обновлены", "ОК");
-
-            objectListView.ItemsSource = GetObjectList();
-        }
     }
+
 }

@@ -39,14 +39,15 @@ namespace Laokontroll.Views
             };
         }
 
-        private void OnViewObjectsClicked(object sender, EventArgs e)
+        private async void OnViewObjectsClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new ObjectList(database, warehouse));
+            await Navigation.PushAsync(new ObjectList(database, warehouse)); // Переход к списку объектов на складе
         }
 
-        private void OnAddObjectClicked(object sender, EventArgs e)
+        private async void OnAddObjectClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new AB(database, warehouse));
+            await Navigation.PushAsync(new AB(database, warehouse)); // Переход к добавлению нового объекта
         }
     }
+
 }

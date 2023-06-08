@@ -82,8 +82,9 @@ namespace Laokontroll.Views
             if (selectedWarehouse == null)
                 return;
 
-            await Navigation.PushAsync(new Lao(database,selectedWarehouse));
+            await Navigation.PushAsync(new Lao(database, selectedWarehouse));
         }
+
 
         private List<Laos> GetWarehouseList()
         {

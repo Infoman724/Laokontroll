@@ -53,7 +53,8 @@ namespace Laokontroll.Views
             Models.Object obj = new Models.Object
             {
                 Nimetus = objectName,
-                Asukoht = objectAsukoht
+                Asukoht = objectAsukoht,
+                LaosId = warehouse.LaosId // Установка идентификатора текущего склада
             };
 
             App.Database.SaveObject(obj);
@@ -61,5 +62,7 @@ namespace Laokontroll.Views
 
             await Navigation.PopAsync();
         }
+
+
     }
 }
